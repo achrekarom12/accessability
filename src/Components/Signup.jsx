@@ -1,51 +1,54 @@
 import {
   browserLocalPersistence,
+  createUserWithEmailAndPassword,
   GoogleAuthProvider,
   onAuthStateChanged,
   setPersistence,
   signInWithEmailAndPassword,
   signInWithPopup,
+  signOut,
 } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { auth, db } from "../firebaseConfig";
 
-function Login() {
+function Signup() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const provider = new GoogleAuthProvider();
   const navigate = useNavigate();
-
-  function login(e) {
+  const provider = new GoogleAuthProvider();
+  provider.setCustomParameters({
+    prompt: "select_account",
+  });
+  const [initializing, setInitializing] = useState(true);
+  function signup(e) {
+    console.log("hello");
     e.preventDefault();
-    console.log(email, password);
     setPersistence(auth, browserLocalPersistence).then(() => {
-      signInWithEmailAndPassword(auth, email, password)
+      createUserWithEmailAndPassword(auth, email, password)
         .then((userCredentials) => {
-          console.log("Login Successful");
-          navigate("/home");
+          setDoc(doc(db, "users", userCredentials.user.uid), {
+            registerCompleted: false,
+          }).then(() => {
+            console.log("Sign up successful");
+            navigate("/register");
+          });
         })
         .catch((error) => {
-          console.log(error);
-          let errorMessage;
-          switch (error.code) {
-            case "auth/user-not-found":
-              errorMessage = "User not found";
-              break;
-            case "auth/wrong-password":
-              errorMessage = "Incorrect password";
-              break;
-            case "auth/invalid-email":
-              errorMessage = "Invalid email";
-              break;
-            default:
-              errorMessage = "An error occurred";
+          if (error.code === "auth/email-already-in-use") {
+            setErrorMessage("The email address you entered is already in use.");
+          } else if (error.code === "auth/invalid-email") {
+            setErrorMessage("The email address you entered is not valid.");
+          } else if (error.code === "auth/weak-password") {
+            setErrorMessage("The password you entered is not strong enough.");
+          } else {
+            console.log(error);
+            setErrorMessage("An error occurred. Please try again later.");
           }
-          // Set the errorMessage state
-          setErrorMessage(errorMessage);
         });
     });
   }
@@ -53,11 +56,12 @@ function Login() {
   function googleAuth() {
     signInWithPopup(auth, provider)
       .then((userCredential) => {
+        console.log("Google auth successful");
         setDoc(doc(db, "users", userCredential.user.uid), {
           registerCompleted: false,
         }).then(() => {
           console.log("Sign up successful");
-          navigate("/home");
+          navigate("/");
         });
       })
       .catch((err) => {
@@ -67,8 +71,18 @@ function Login() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      console.log(user);
+
       if (user) {
-        navigate("/home");
+        console.log(user.uid);
+        getDoc(doc(db, "users", user.uid)).then((data) => {
+          console.log(data.data());
+          if (data.data()["registerCompleted"]) {
+            navigate("/");
+          } else {
+            navigate("/register");
+          }
+        });
       }
     });
 
@@ -86,12 +100,12 @@ function Login() {
       <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
         <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
           <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-            Sign in to your account
+            Create an account
           </h1>
-          <form class="space-y-4 md:space-y-6" onSubmit={login}>
+          <form class="space-y-4 md:space-y-6" onSubmit={signup}>
             <div>
               <label
-                htmlFor="email"
+                for="email"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 Your email
@@ -102,14 +116,14 @@ function Login() {
                 id="email"
                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="name@company.com"
+                required=""
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
-                required=""
               />
             </div>
             <div>
               <label
-                htmlFor="password"
+                for="password"
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 Password
@@ -119,21 +133,21 @@ function Login() {
                 name="password"
                 id="password"
                 placeholder="••••••••"
-                onChange={(e) => setPassword(e.target.value)}
-                value={password}
                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 required=""
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
               />
             </div>
             <button
               type="submit"
               class="w-full text-white bg-blue-500 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
             >
-              Sign in
+              Sign out
             </button>
             <p class="text-sm font-light text-gray-500 dark:text-gray-400">
               Don’t have an account yet?{" "}
-              <button onClick={() => navigate("/signup")}>Sign up</button>
+              <button onClick={() => navigate("/")}>Sign in</button>
             </p>
           </form>
         </div>
@@ -142,4 +156,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Signup;
