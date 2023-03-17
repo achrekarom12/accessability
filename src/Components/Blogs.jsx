@@ -31,22 +31,22 @@ function Blogs() {
   };
   return (
     <div>
-        {datas.map((data) =>
+      
       <article className="max-w-5xl px-4 py-24 mx-auto space-y-12">
         <div className="w-full mx-auto space-y-4 text-center">
-          <a
-            href="#"
+        {location.state.genre.map((genre_name) =>(
+          <button
             class="relative z-10 rounded-full bg-gray-300 py-1.5 px-3 font-medium text-gray-600 hover:bg-gray-300"
           >
-            Self-care
-          </a>
-
+            {genre_name}
+          </button>)
+          )}
           <h1 className="text-4xl font-bold leading-tight md:text-5xl">{location.state.title}</h1>
           <p className="text-sm text-black">
             by &nbsp;
-            <span itemprop="name">{}</span>
+            <span itemprop="name">{location.state.author}</span>
             &nbsp;on&nbsp;
-            <time datetime="2021-02-12 15:34:18-0200">{}</time>
+            <time datetime="2021-02-12 15:34:18-0200">{location.state.date}</time>
           </p>
         </div>
         <div className="text-center">
@@ -86,7 +86,7 @@ function Blogs() {
           </button>
           <TextToSpeech
             text={
-              "Life can be tough sometimes, with its ups and downs, and its easy to get caught up in the negative aspects of it. But no matter how difficult things may seem, there is always something to be grateful for. Gratitude is a powerful emotion that has the ability to transform our lives. It allows us to focus on the positive aspects of our lives and to appreciate what we have rather than focusing on what we lack. Research has shown that practicing gratitude can improve our overall well-being, including our physical and mental health, relationships, and work satisfaction. There are many things in our lives that we can be grateful for, from the simple pleasures to the significant milestones. Here are some examples: Good health: Being healthy is something we often take for granted, but its a blessing that we should be grateful for. Having good health allows us to live life to the fullest and to pursue our dreams and goals. Supportive relationships: Having people in our lives who love and support us is another thing to be grateful for. Whether its family, friends, or colleagues, having a support system can help us navigate the challenges of life. Basic necessities: Having access to food, shelter, and clean water is something that many people around the world lack. Being able to meet our basic needs is a privilege that we should be grateful for. Opportunities for growth: Life is full of opportunities for growth and learning. Whether its through education, travel, or new experiences, these opportunities can help us become better versions of ourselves. Small moments of joy: Its often the small moments of joy that make life worth living. Whether its a beautiful sunset, a good book, or a warm hug, taking the time to appreciate these moments can bring us happiness and gratitude. Practicing gratitude doesnt mean ignoring the challenges and difficulties of life. Instead, it means acknowledging the good things in our lives and focusing on them, even when things are tough. Here are some tips for cultivating gratitude: Keep a gratitude journal: Take a few minutes each day to write down three things youre grateful for. This can help you focus on the positive aspects of your life and cultivate a sense of gratitude. Express gratitude to others: Take the time to thank the people in your life who have made a difference. Whether its a heartfelt thank-you note or a simple thank you, expressing gratitude to others can strengthen relationships and increase happiness. Practice mindfulness: Paying attention to the present moment can help us appreciate the small things in life and cultivate a sense of gratitude. Mindfulness practices such as meditation or deep breathing can help us stay present and focused. In conclusion, theres always something to be grateful for, no matter how difficult life may seem. Taking the time to appreciate the good things in our lives can help us cultivate a sense of gratitude and increase our overall well-being. So, lets take a moment to be thankful for the blessings in our lives, big and small, and focus on the positive aspects of life."
+              location.state.text
             }
           />
         </div>
@@ -98,11 +98,10 @@ function Blogs() {
             id="blog-content"
             style={{ fontSize: `${fontSize}px` }}
           >
-            {}
+            {location.state.blog_content}
           </p>
         </div>
       </article>
-      )}
     </div>
   );
 }

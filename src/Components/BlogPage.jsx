@@ -2,11 +2,16 @@ import React from 'react'
 import data from "../assets/blogs.json";
 import {useNavigate} from "react-router-dom";
 import avatar from "../assets/user-dummy.jpeg"
+import Navbar from './Navbar';
+
 
 function BlogPage() {
   const navigate = useNavigate();
 
   return (
+    <div>
+      <Navbar />
+
     <div class="bg-white py-24 sm:py-32">
     <div class="mx-auto max-w-7xl px-6 lg:px-8">
       <div class="mx-auto max-w-2xl lg:mx-0">
@@ -35,10 +40,9 @@ function BlogPage() {
             </div>
             <div class="group relative">
               <h3 class="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
-                <a href="#">
+
                   <span class="absolute inset-0"></span>
                   {data.title}
-                </a>
               </h3>
               <p class="mt-5 text-sm leading-6 text-gray-600 line-clamp-3">
                 {data.desc}
@@ -65,6 +69,8 @@ function BlogPage() {
       </div>
     </div>
   </div>
+  </div>
+
   )
 }
 
