@@ -28,7 +28,8 @@ function GrievanceSys() {
       <Navbar />
       <div className="w-full flex flex-col justify-center items-center h-[76vh]">
         <div className="flex flex-col justify-center items-center">
-          <h3 className="text-2xl mb-5">Grievances </h3>
+          <h3 className="text-3xl mb-5 font-bold">Grievances </h3>
+          <h3 className="text-m mb-5">If you face any problem in public spaces, don't worry we will be the voice for you! </h3>
           <textarea
             cols="45"
             rows="5"

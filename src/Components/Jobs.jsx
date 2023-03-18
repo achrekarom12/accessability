@@ -1,8 +1,10 @@
 // import logo from './logo.svg';
-import './style.css';
+import './Jobs.css';
 // import ReactDOM from "react-dom";
 import React from 'react';
 import Navbar from './Navbar';
+import datas from "../assets/jobs.json";
+
 // import b_d from './images/b_d.png';
 // import d_d from './images/d_d.jpg';
 // import b_i from './images/b_i.png';
@@ -13,30 +15,14 @@ import Navbar from './Navbar';
 // import home3 from './images/home3.jpg';
 // import home4 from './images/home4.jpg';
 
-// function Navbar()
-// {
-//     return(
-//         <nav className="navbar">
-//             {/* <img className="logo" src="simple.jpg" width="70px" alt="logo"></img> */}
-//             <div className="name">Normal.</div>  
-//             <ul className="nav-menu">
-//             <li className="nav-item"><a href="#jobs">Jobs</a></li> 
-//             <li className="nav-item"><a href="#companies">Companies</a></li>
-//             <li className="nav-item"><a href="#aboutus">About Us</a></li>
-//             <li className="nav-item"><a href="#contact">Contacts</a></li> 
-
-//             </ul>
-//             <button className="nav-btn">Sign in</button>
-         
-//         </nav>
-        
-//     )
-// }
 
 function Introduction()
 {
     return(
+        <>
+        <Navbar/>
         <div className="intro">
+            
             <div className="into-info">
             <p className="intro-element1">Find Your <span className="different"> Dream Job</span><br /> Now It's Easy.</p>            
             </div>
@@ -48,6 +34,7 @@ function Introduction()
             
             
         </div>
+        </>
     )
 }
 
@@ -61,7 +48,7 @@ function JobCategory()
             <div className="column" id="column">
                 <div className="card" id="card">
                 <div className="icon-box">
-                    <img className="center" src="computer-16.png" alt="icon"></img> 
+                    <img className="center" src="client/public/computer-16.png" alt="icon"></img> 
                 </div>
                 <div className="card-text">
                 <p className="text-1">IT/Computer</p>
@@ -180,26 +167,27 @@ function YourJob()
                     <li className="list-item"><a href="#marketing">Marketing</a></li>
                 </ul>
             </div>
+            
             <div className="list-card">
                 <div className="list-row">
+                {datas.map((data) =>
                      <div className="list-column">
                        <div className="cardl">
                         <div className="card-head">
-                            <text className="txt1">Figma</text>
-                            <text className="txt2">10 Mar</text>
+                            <text className="txt1">{data.company}</text>
+                            <text className="txt2">{data.date}</text>
                          </div>
                         <div >
-                            <p className="head-title">Finance Manager</p>
+                            <p className="head-title">{data.position}</p>
                         </div>
                         <div className="features">
                                     <text className="type">Full-time</text>
                                     <text className="job">Finance</text>
                         </div>
                          
-                            <p className="loct">Mumbai, India</p>
+                            <p className="loct">{data.location}</p>
                             <p className="more-info">
-                            Lorem ipsum dolor sit amet. Sit mollitia autem et ipsa galisum
-                            et voluptatem autem qui cupiditate nesciunt. 
+                            {data.desc}
                             </p>
                             <div className="cardbtn">
                             <button className="contact">Contact</button>
@@ -207,7 +195,8 @@ function YourJob()
                             </div>
                         </div>  
                      </div>
-                     <div className="list-column">
+                )}
+                     {/* <div className="list-column">
                        <div className="cardl">
                        <div className="card-head">
                             <text className="txt1">Figma</text>
@@ -381,7 +370,7 @@ function YourJob()
                             <button className="apply">Apply  </button>
                             </div>
                         </div>  
-                     </div>
+                     </div> */}
                 </div>
             </div>
         </div>
@@ -391,7 +380,8 @@ function YourJob()
 function Jobs() {
   return (
         <div>
-            <Navbar />
+            <></>
+            <Navbar/>
             <Introduction/>
             <JobCategory/>
             <YourJob/>

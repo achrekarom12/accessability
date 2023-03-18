@@ -2,6 +2,8 @@ import React from "react";
 import datas from "../assets/courses.json";
 import {useLocation} from "react-router-dom"
 import {useNavigate} from "react-router-dom";
+import Navbar from './Navbar';
+
 import Footer from './Footer';
 
 
@@ -10,9 +12,11 @@ function CoursePage() {
   const navigate = useNavigate();
 
   return (
+    <>
+    <Navbar />
     <section class="text-gray-600 body-font">
-  <div class="container px-5 py-24 mx-auto">
-    <p className="text-4xl font-semibold text-center text-black py-6">Courses you might like...</p>
+  <div class="container px-5 py-19 mx-auto">
+    <p className="text-4xl font-semibold text-center text-black py-6">Courses based on your interests and qualification..</p>
     <div class="flex flex-wrap -m-4">
     {datas.map((data) =>
       <div class="p-4 md:w-1/3">
@@ -53,6 +57,7 @@ function CoursePage() {
   <Footer />
 
 </section>
+</>
   );
 }
 
